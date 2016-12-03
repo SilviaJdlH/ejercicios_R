@@ -1,0 +1,92 @@
+---
+author: "Silvia JimÃfÂ©nez de las Heras"
+date: "3 de diciembre de 2016"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Ejercicios de clase {.tabset .tabset-fade .tabset-pills}
+## Ejercicio 1
+Escribir una función mediaColumnas que calcule la media de las columnas de un data.frame que se pasa como argumento usando un bucle y las devuelva en un vector. La función debe comprobar que el argumento es un data.frame.
+
+```{r mediaColumnas}
+mediaColumnas <- function(df){
+ if (!is.data.frame(df)){
+   print("El argumento no es un dataframe")
+   return(NA)
+  }
+ media <- array()
+ for (idx in seq_along(df)){
+   media[idx] <- mean(df[,idx], rm.na=TRUE)
+   }
+ media
+}
+```
+
+Generar un data.frame de 1,000 filas y 100,000 columnas con números aleatorios con distribución normal con media 10 y desviación 2.
+
+```{r data.frame}
+cols = 100000
+rows = 1000
+
+df <- as.data.frame(matrix(rnorm(cols*rows, 10, 2), ncol = cols, nrow = rows))
+```
+
+Utilizar la función anterior para calcular la media de las columnas de los datos del data.frame.
+
+```{r tiempo mediaColumnas}
+t1 <- system.time(mediaColumnas(df))[3]
+```
+
+Hacer la misma operación anterior pero ahora con la función sapply.
+
+```{r tiempo mean}
+t2 <- system.time(sapply(df, mean))[3]
+```
+
+Comparar el tiempo de ejecución de los dos procedimientos anteriores.
+
+```{r comparacion}
+print(paste0("Tiempo de ejecución de mediaColumna: ", t1))
+print(paste0("Tiempo de ejecución de mean: ", t2))
+```
+
+## Ejercicio 2
+Generar 10000 números aleatorios con una distribución normal estándar (media 0 y varianza 1).
+```{r numeros aleatorios}
+a <- rnorm(10000)
+
+```
+Realizar un histograma de los valores anteriores. ¿Cual es el menor y mayor valor generado?.
+```{r histograma}
+hist(a, probability = T)
+curve(dnorm(x), -4, 4, add=T)
+
+```
+
+Calcular los valores de la distribución normal para 100 puntos en el intervalo anterior, utilizando las función seq() y dnorm().
+```{r valores dist.normal}
+x <- seq(-4, 4, length.out = 100)
+y <- dnorm(x)
+```
+
+Superponer los valores de la distribución normal calculados al histograma (función lines()). ¿Se aproxima el histograma a la curva calculada?
+```{r lines y point dist.normal}
+hist(a, probability = T)
+lines(x, y)
+points(x, y)
+```
+
+Ver el parámetro probability de la función hist y volver a generar el histograma cambiando su valor. ¿Se aproxima
+ahora a a la curva?.
+### End tabset
+
+
+
+
+
